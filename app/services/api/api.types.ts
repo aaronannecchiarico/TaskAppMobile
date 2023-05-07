@@ -1,38 +1,25 @@
+import { GeneralApiProblem } from "./apiProblem"
+
 /**
  * These types indicate the shape of the data you expect to receive from your
  * API endpoint, assuming it's a JSON object like we have.
  */
-export interface EpisodeItem {
-  title: string
-  pubDate: string
-  link: string
-  guid: string
-  author: string
-  thumbnail: string
-  description: string
-  content: string
-  enclosure: {
-    link: string
-    type: string
-    length: number
-    duration: number
-    rating: { scheme: string; value: string }
-  }
-  categories: string[]
+export interface User {
+  id: string
+  auth_token?: string
+  email: string
+  created_at: Date | number
+  updated_at: Date | number
+  first_name: string
+  last_name: string
 }
 
-export interface ApiFeedResponse {
-  status: string
-  feed: {
-    url: string
-    title: string
-    link: string
-    author: string
-    description: string
-    image: string
-  }
-  items: EpisodeItem[]
+export interface Users {
+  users: User[],
+  kind: "ok"
 }
+
+export type GetUsersResult = Users | { kind: "bad-data" } | { kind: "no-data" } | GeneralApiProblem
 
 /**
  * The options used to configure apisauce.
