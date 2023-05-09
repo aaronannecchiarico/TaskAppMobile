@@ -81,9 +81,7 @@ export class Api {
    * Gets a list of users.
    */
   async getUsers(): Promise<Types.GetUsersResult> {
-    const response: ApiResponse<any> = await this.apisauce.get("", {
-      amount: API_PAGE_SIZE,
-    })
+    const response: ApiResponse<any> = await this.apisauce.get("/users")
 
     if (!response.ok) {
       const problem = getGeneralApiProblem(response)

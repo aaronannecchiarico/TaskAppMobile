@@ -31,7 +31,7 @@ export const UserModel = types
         self.setProp("first_name", result.user.first_name)
         self.setProp("last_name", result.user.last_name)
       } else {
-        console.tron.error(`Error fetching questions: ${JSON.stringify(result)}`, [])
+        console.tron.error(`Error fetching user: ${JSON.stringify(result)}`, [])
       }
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars

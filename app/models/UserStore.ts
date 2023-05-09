@@ -20,7 +20,7 @@ export const UserStoreModel = types
       if (result.kind === "ok") {
         self.setProp("users", result.users)
       } else {
-        console.tron.error(`Error fetching questions: ${JSON.stringify(result)}`, [])
+        console.tron.error(`Error fetching users: ${JSON.stringify(result)}`, [])
       }
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
