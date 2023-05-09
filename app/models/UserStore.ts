@@ -1,7 +1,8 @@
 import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "./helpers/withSetPropAction"
 import { UserModel } from "./User"
-import { api, GetUsersResult } from "app/services/api"
+import { api } from "./../services/api"
+import { GetUsersResult } from "./../services/api/api.types"
 
 /**
  * Model description here for TypeScript hints.

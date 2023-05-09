@@ -11,7 +11,7 @@ export interface User {
   created_at: Date | number
   updated_at: Date | number
   first_name: string
-  last_name: string
+  last_name: string,
 }
 
 export interface Users {
@@ -19,7 +19,9 @@ export interface Users {
   kind: "ok"
 }
 
+export type GetUserResult = {user: User, kind: 'ok'} | { kind: "bad-data" } | { kind: "no-data" } | GeneralApiProblem
 export type GetUsersResult = Users | { kind: "bad-data" } | { kind: "no-data" } | GeneralApiProblem
+
 
 /**
  * The options used to configure apisauce.

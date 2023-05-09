@@ -12,11 +12,9 @@ import * as Types from "./api.types"
 import { getGeneralApiProblem } from "./apiProblem"
 import { UserSnapshotOut } from "app/models"
 
-
 const API_PAGE_SIZE = 50
 
 const convertUser = (raw: any): UserSnapshotOut => {
-
   return {
     id: raw.id,
     auth_token: raw.auth_token,
@@ -59,21 +57,39 @@ export class Api {
   }
 
   /**
-   * Gets a list of trivia questions.
+   * Gets a single user by ID
    */
-  async getUsers(): Promise<Types.GetUsersResult> {
-    // make the api call
-    const response: ApiResponse<any> = await this.apisauce.get("", {
-      amount: API_PAGE_SIZE,
-    })
+  async getUser(): Promise<Types.GetUserResult> {
+    const response: ApiResponse<any> = await this.apisauce.get("/user")
 
-    // the typical ways to die when calling an api
     if (!response.ok) {
       const problem = getGeneralApiProblem(response)
       if (problem) return problem
     }
 
-    // transform the data into the format we are expecting
+    try {
+      const rawUser = response.data.results
+      const convertedUser: UserSnapshotOut = convertUser(rawUser);
+      return { user: convertedUser, kind: "ok"}
+    } catch (e) {
+      __DEV__ && console.tron.log(e.message)
+      return { kind: "bad-data" }
+    }
+  }
+
+  /**
+   * Gets a list of users.
+   */
+  async getUsers(): Promise<Types.GetUsersResult> {
+    const response: ApiResponse<any> = await this.apisauce.get("", {
+      amount: API_PAGE_SIZE,
+    })
+
+    if (!response.ok) {
+      const problem = getGeneralApiProblem(response)
+      if (problem) return problem
+    }
+
     try {
       const rawUsers = response.data.results
       const convertedUsers: UserSnapshotOut[] = rawUsers.map(convertUser)
