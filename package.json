@@ -56,6 +56,7 @@
     "mobx-state-tree": "5.1.5",
     "react": "18.2.0",
     "react-native": "0.71.7",
+    "react-native-auth0": "^2.17.2",
     "react-native-bootsplash": "4.5.0",
     "react-native-gesture-handler": "~2.9.0",
     "react-native-reanimated": "~2.14.4",
