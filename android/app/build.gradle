@@ -109,6 +109,9 @@ def reactNativeArchitectures() {
 }
 
 android {
+    defaultConfig {
+        manifestPlaceholders = [auth0Domain: "dev-2l7x8x05wpghp2c8.us.auth0.com", auth0Scheme: "${applicationId}"]
+    }
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion

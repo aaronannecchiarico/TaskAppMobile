@@ -12,8 +12,6 @@ import * as Types from "./api.types"
 import { getGeneralApiProblem } from "./apiProblem"
 import { UserSnapshotOut } from "app/models"
 
-const API_PAGE_SIZE = 50
-
 const convertUser = (raw: any): UserSnapshotOut => {
   return {
     id: raw.id,

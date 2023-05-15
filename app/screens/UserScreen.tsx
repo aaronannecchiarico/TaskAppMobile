@@ -1,13 +1,13 @@
 import React, { FC, useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { FlatList, TextStyle, View, ViewStyle } from "react-native"
+import { Button, FlatList, TextStyle, View, ViewStyle } from "react-native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { AppStackScreenProps } from "app/navigators"
 import { Screen, Text } from "app/components"
 import { spacing } from "app/theme"
 import { User, useStores } from "app/models"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "app/models"
+import Auth0 from 'react-native-auth0';
+import Config from "app/config"
 
 interface UserScreenProps extends NativeStackScreenProps<AppStackScreenProps<"User">> {}
 
@@ -20,7 +20,7 @@ export const UserScreen: FC<UserScreenProps> = observer(function UserScreen() {
       const { users } = userStore
   
       useEffect(() => {
-        fetchUsers()
+        // fetchUsers()r
       }, [])
   
       const fetchUsers = () => {
@@ -29,6 +29,27 @@ export const UserScreen: FC<UserScreenProps> = observer(function UserScreen() {
         setRefreshing(false)
       }
 
+      const LoginButton = () => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const auth0 = new Auth0({
+          domain: Config.AUTH0_DOMAIN,
+          clientId: Config.AUTH0_CLIENT_ID,
+        });
+    
+        const onPress = async () => {
+            try {
+                const response = await auth0.webAuth.authorize({
+                    scope: 'openid profile email',
+                    audience: `https://${Config.AUTH0_DOMAIN}/userinfo`,
+                });
+                console.log(response);
+            } catch (e) {
+                console.error(e);
+            }
+        };
+    
+        return <Button onPress={onPress} title="Log in" />
+      }
       const UserComponent = ({ item }) => {
         const user: User = item.item
         return (
@@ -47,6 +68,7 @@ export const UserScreen: FC<UserScreenProps> = observer(function UserScreen() {
   return (
     <Screen style={$root} preset="fixed">
     <Text preset="heading" tx={"userScreen.users"} style={$header} />
+    <LoginButton />
     <FlatList
       data={users}
       renderItem={(item) => <ObservedUser item={item} />}
