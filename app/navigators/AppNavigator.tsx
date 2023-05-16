@@ -4,11 +4,7 @@
  * Generally speaking, it will contain an auth flow (registration, login, forgot password)
  * and a "main" flow which the user will use once logged in.
  */
-import {
-  DarkTheme,
-  DefaultTheme,
-  NavigationContainer,
-} from "@react-navigation/native"
+import { DarkTheme, DefaultTheme, NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator, NativeStackScreenProps } from "@react-navigation/native-stack"
 import { observer } from "mobx-react-lite"
 import React from "react"
@@ -16,6 +12,7 @@ import { useColorScheme } from "react-native"
 import * as Screens from "app/screens"
 import Config from "../config"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
+import { useAuth0 } from "react-native-auth0"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -33,6 +30,7 @@ import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 export type AppStackParamList = {
   // 🔥 Your screens go here
   User: undefined
+  Login: undefined
 	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
@@ -51,14 +49,22 @@ export type AppStackScreenProps<T extends keyof AppStackParamList> = NativeStack
 const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
+  const { user } = useAuth0();
+  const isAuthenticated = !!user;
+  console.tron.log(isAuthenticated);
   return (
-    <Stack.Navigator
-      screenOptions={{ headerShown: false }}
-    >
-      {/** 🔥 Your screens go here */}
-      <Stack.Screen name="User" component={Screens.UserScreen} />
+      <Stack.Navigator screenOptions={{ headerShown: true }} initialRouteName={isAuthenticated ? "User" : "Login"}>
+        {isAuthenticated ? (
+          <>
+            <Stack.Screen name="User" component={Screens.UserScreen} />
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="Login" component={Screens.LoginScreen} />
+          </>
+        )}
 			{/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
-    </Stack.Navigator>
+      </Stack.Navigator>
   )
 })
 
