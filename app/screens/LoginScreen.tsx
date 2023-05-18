@@ -5,19 +5,42 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { AppStackScreenProps } from "app/navigators"
 import { Screen, Text, Button } from "app/components"
 import { spacing } from "app/theme"
-// import { useStores } from "app/models"
+import { useStores } from "app/models"
 import { useAuth0 } from 'react-native-auth0'
 
 interface LoginScreenProps extends NativeStackScreenProps<AppStackScreenProps<"Login">> {}
 
 export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen() {
   // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-  const {authorize} = useAuth0();
+  const { authUserStore } = useStores()
+  const {authorize, getCredentials, user} = useAuth0();
 
   const onPress = async () => {
       try {
-          await authorize();
+          try{
+            await authorize();
+          }catch(error){
+            console.tron.log('Auth0 Error calling authorize()', error);
+          }
+          
+          try{
+            const { accessToken } = await getCredentials();
+            if(user){
+              authUserStore.saveUser(user);
+            }else{
+              console.tron.log('Auth0 Error calling getCredentials() - no user');
+            }
+  
+            if(accessToken){
+              authUserStore.saveAccessToken(accessToken);
+            }else{
+              console.tron.log('Auth0 Error calling getCredentials() - no accessToken');
+            }
+          }catch(error){
+            console.tron.log('Auth0 Error calling getCredentials()', error);
+          }
+          
+      
       } catch (e) {
           console.log(e);
       }

@@ -12,7 +12,7 @@ import { useColorScheme } from "react-native"
 import * as Screens from "app/screens"
 import Config from "../config"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
-import { useAuth0 } from "react-native-auth0"
+import { useStores } from "app/models"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -49,9 +49,10 @@ export type AppStackScreenProps<T extends keyof AppStackParamList> = NativeStack
 const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
-  const { user } = useAuth0();
-  const isAuthenticated = !!user;
-  console.tron.log(isAuthenticated);
+  const { authUserStore } = useStores();
+
+  const isAuthenticated = authUserStore.isLoggedIn;
+
   return (
       <Stack.Navigator screenOptions={{ headerShown: true }} initialRouteName={isAuthenticated ? "User" : "Login"}>
         {isAuthenticated ? (

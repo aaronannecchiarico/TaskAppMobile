@@ -2556,6 +2556,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-native-auth0@^2.17.4":
+  version "2.17.4"
+  resolved "https://registry.yarnpkg.com/@types/react-native-auth0/-/react-native-auth0-2.17.4.tgz#5f0fe6840a6513b59ffe808e6dbd7e85df6307c1"
+  integrity sha512-d5piaFHRIe8RbMwMMcUZtTZP2WEvyoHU9A9wnKEA6QBNfAOXds66etD32e40cJVY2WgmN2XDLjfUAheiDzpaLA==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-test-renderer@^18.0.0":
   version "18.0.0"
   resolved "https://registry.yarnpkg.com/@types/react-test-renderer/-/react-test-renderer-18.0.0.tgz#7b7f69ca98821ea5501b21ba24ea7b6139da2243"
