@@ -7,5 +7,6 @@ import { Platform } from "react-native"
  * https://reactnative.dev/docs/security#storing-sensitive-info
  */
 export default {
+  // TODO: sort out why this is necessary for android
   API_URL: Platform.OS === "ios" ? "http://localhost:3000/api/v1" : "http://10.0.2.2:3000/api/v1",
 }
