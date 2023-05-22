@@ -57,16 +57,16 @@ const AppStack = observer(function AppStack() {
     console.tron.log("Auth0 Error calling getCredentials() - no user")
   }
 
-  if (user && user !== authUserStore.user) {
+  if (user !== authUserStore.user) {
     authUserStore.saveUser(user)
   }
 
   getCredentials().then(({ accessToken, idToken }) => {
-    if (accessToken && accessToken !== authUserStore.access_token) {
+    if (accessToken !== authUserStore.access_token) {
       authUserStore.saveAccessToken(accessToken)
     }
 
-    if (idToken && idToken !== authUserStore.id_token) {
+    if (idToken !== authUserStore.id_token) {
       authUserStore.saveIdToken(idToken)
     }
   })
