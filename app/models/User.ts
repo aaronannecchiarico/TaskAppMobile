@@ -9,8 +9,7 @@ import { GetUserResult } from "./../services/api/api.types"
 export const UserModel = types
   .model("User")
   .props({
-    id: types.identifier, 
-    auth_token: types.maybeNull(types.string),
+    id: types.identifier,
     email: types.string,
     created_at: types.Date,
     updated_at: types.Date,
@@ -20,11 +19,10 @@ export const UserModel = types
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
-    async getUser() {
-      const result: GetUserResult = await api.getUser()
+    async getUser(token) {
+      const result: GetUserResult = await api.getUser(token)
       if (result.kind === "ok") {
         self.setProp("id", result.user.id)
-        self.setProp("auth_token", result.user.auth_token)
         self.setProp("email", result.user.email)
         self.setProp("created_at", result.user.created_at)
         self.setProp("updated_at", result.user.updated_at)

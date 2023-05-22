@@ -13,6 +13,7 @@ import * as Screens from "app/screens"
 import Config from "../config"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { useStores } from "app/models"
+import { useAuth0 } from "react-native-auth0"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -31,7 +32,7 @@ export type AppStackParamList = {
   // 🔥 Your screens go here
   User: undefined
   Login: undefined
-	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
 /**
@@ -49,23 +50,43 @@ export type AppStackScreenProps<T extends keyof AppStackParamList> = NativeStack
 const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
-  const { authUserStore } = useStores();
+  const { authUserStore } = useStores()
+  const { authorize, getCredentials, user } = useAuth0()
 
-  const isAuthenticated = authUserStore.isLoggedIn;
+  if (!user) {
+    console.tron.log("Auth0 Error calling getCredentials() - no user")
+  }
+
+  if (user && user !== authUserStore.user) {
+    authUserStore.saveUser(user)
+  }
+
+  getCredentials().then(({ accessToken, idToken }) => {
+    if (accessToken && accessToken !== authUserStore.access_token) {
+      authUserStore.saveAccessToken(accessToken)
+    }
+
+    if (idToken && idToken !== authUserStore.id_token) {
+      authUserStore.saveIdToken(idToken)
+    }
+  })
+
+  const handleLogin = () => {
+    authorize()
+  }
+
+  const isAuthenticated = authUserStore.isLoggedIn
 
   return (
-      <Stack.Navigator screenOptions={{ headerShown: true }} initialRouteName={isAuthenticated ? "User" : "Login"}>
-        {isAuthenticated ? (
-          <>
-            <Stack.Screen name="User" component={Screens.UserScreen} />
-          </>
-        ) : (
-          <>
-            <Stack.Screen name="Login" component={Screens.LoginScreen} />
-          </>
-        )}
-			{/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
-      </Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{ headerShown: true }}
+      initialRouteName={isAuthenticated ? "User" : "Login"}
+    >
+      <Stack.Screen name="User" component={Screens.UserScreen} />
+      <Stack.Screen name="Login">
+        {(props) => <Screens.LoginScreen {...props} handleLogin={handleLogin} />}
+      </Stack.Screen>
+    </Stack.Navigator>
   )
 })
 

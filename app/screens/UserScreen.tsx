@@ -14,16 +14,16 @@ export const UserScreen: FC<UserScreenProps> = observer(function UserScreen() {
       const [refreshing, setRefreshing] = React.useState(false)
 
       // Pull in one of our MST stores
-      const { userStore } = useStores()
+      const { userStore, authUserStore } = useStores()
       const { users } = userStore
-  
+
       useEffect(() => {
         fetchUsers()
       }, [])
-  
+
       const fetchUsers = () => {
         setRefreshing(true)
-        userStore.getUsers()
+        userStore.getUsers(authUserStore.id_token)
         setRefreshing(false)
       }
 
@@ -48,7 +48,6 @@ export const UserScreen: FC<UserScreenProps> = observer(function UserScreen() {
     <FlatList
       data={users}
       renderItem={(item) => <ObservedUser item={item} />}
-      extraData={{ extraDataForMobX: users.length > 0 ? users[0].auth_token : "" }}
       keyExtractor={(item) => item.id}
       onRefresh={fetchUsers}
       refreshing={refreshing}

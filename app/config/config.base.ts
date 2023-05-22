@@ -24,7 +24,7 @@ const BaseConfig: ConfigBaseProps = {
    */
   exitRoutes: ["Welcome"],
   AUTH0_DOMAIN: "dev-2l7x8x05wpghp2c8.us.auth0.com",
-  AUTH0_CLIENT_ID: "SPDHrkE5fOedsjIF1TJVlbCukZR2QvQo",
+  AUTH0_CLIENT_ID: "O04UKHj2ZpAh8QIK6ta4NdX7AtB4dwZM",
 }
 
 export default BaseConfig

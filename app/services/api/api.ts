@@ -57,7 +57,8 @@ export class Api {
   /**
    * Gets a single user by ID
    */
-  async getUser(): Promise<Types.GetUserResult> {
+  async getUser(token): Promise<Types.GetUserResult> {
+    this.apisauce.setHeader("Authorization", `Bearer ${token}`)
     const response: ApiResponse<any> = await this.apisauce.get("/user")
 
     if (!response.ok) {
@@ -67,8 +68,8 @@ export class Api {
 
     try {
       const rawUser = response.data.results
-      const convertedUser: UserSnapshotOut = convertUser(rawUser);
-      return { user: convertedUser, kind: "ok"}
+      const convertedUser: UserSnapshotOut = convertUser(rawUser)
+      return { user: convertedUser, kind: "ok" }
     } catch (e) {
       __DEV__ && console.tron.log(e.message)
       return { kind: "bad-data" }
@@ -78,7 +79,8 @@ export class Api {
   /**
    * Gets a list of users.
    */
-  async getUsers(): Promise<Types.GetUsersResult> {
+  async getUsers(token): Promise<Types.GetUsersResult> {
+    this.apisauce.setHeader("Authorization", `Bearer ${token}`)
     const response: ApiResponse<any> = await this.apisauce.get("/users")
 
     if (!response.ok) {
