@@ -15,8 +15,8 @@ export const UserStoreModel = types
   .actions(withSetPropAction)
   .views((self) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((self) => ({
-    async getUsers() {
-      const result: GetUsersResult = await api.getUsers()
+    async getUsers(token) {
+      const result: GetUsersResult = await api.getUsers(token)
       if (result.kind === "ok") {
         self.setProp("users", result.users)
       } else {
