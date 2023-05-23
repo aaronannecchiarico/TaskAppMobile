@@ -7,7 +7,7 @@ import { Screen, Text, Button } from "app/components"
 import { spacing } from "app/theme"
 
 interface LoginScreenProps extends NativeStackScreenProps<AppStackScreenProps<"Login">> {
-  handleLogin: any //TODO
+  handleLogin:() => Promise<void>;
   navigation: any //TODO
 }
 
@@ -20,9 +20,13 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen({
       <Text text="Task Bids" style={$header} />
       <Button
         text="Login"
-        onPress={() => {
-          handleLogin()
-          navigation.navigate('User')
+        onPress={async () => {
+          try{
+            await handleLogin();
+            navigation.navigate('User')
+          }catch(error){
+            console.tron.log("Error calling handleLogin()", error)
+          }
         }}
         style={$button}
       />

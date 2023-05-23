@@ -51,28 +51,32 @@ const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
   const { authUserStore } = useStores()
-  const { authorize, getCredentials, user } = useAuth0()
-
-  if (!user) {
-    console.tron.log("Auth0 Error calling getCredentials() - no user")
-  }
+  const { authorize, getCredentials, user, error } = useAuth0()
 
   if (user !== authUserStore.user) {
     authUserStore.saveUser(user)
   }
 
-  getCredentials().then(({ accessToken, idToken }) => {
-    if (accessToken !== authUserStore.access_token) {
-      authUserStore.saveAccessToken(accessToken)
-    }
+  if(authUserStore.user && !authUserStore.isLoggedIn){
+    getCredentials().then(({ accessToken, idToken }) => {
+      if (accessToken && accessToken !== authUserStore.access_token) {
+        authUserStore.saveAccessToken(accessToken)
+      }
+  
+      if (idToken && idToken !== authUserStore.id_token) {
+        authUserStore.saveIdToken(idToken)
+      }
+    }).catch((error) => {
+      console.tron.log("Auth0 Error calling getCredentials()", error)
+    })
+  }
 
-    if (idToken !== authUserStore.id_token) {
-      authUserStore.saveIdToken(idToken)
+  const handleLogin = async () => {
+    await authorize();
+    if(error){
+      console.tron.log("Auth0 Error calling authorize()", error)
+      throw error
     }
-  })
-
-  const handleLogin = () => {
-    authorize()
   }
 
   const isAuthenticated = authUserStore.isLoggedIn
@@ -82,10 +86,15 @@ const AppStack = observer(function AppStack() {
       screenOptions={{ headerShown: true }}
       initialRouteName={isAuthenticated ? "User" : "Login"}
     >
-      <Stack.Screen name="User" component={Screens.UserScreen} />
-      <Stack.Screen name="Login">
-        {(props) => <Screens.LoginScreen {...props} handleLogin={handleLogin} />}
-      </Stack.Screen>
+      {isAuthenticated ? (
+        <Stack.Screen name="User" component={Screens.UserScreen} />
+      ) : (
+        <Stack.Screen name="Login">
+          {(props) => <Screens.LoginScreen {...props} handleLogin={handleLogin} />}
+        </Stack.Screen>
+
+      )}
+      {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>
   )
 })
