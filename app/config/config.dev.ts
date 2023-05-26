@@ -1,4 +1,3 @@
-import { Platform } from "react-native"
 /**
  * These are configuration settings for the dev environment.
  *
@@ -8,5 +7,5 @@ import { Platform } from "react-native"
  */
 export default {
   // TODO: sort out why this is necessary for android
-  API_URL: Platform.OS === "ios" ? "http://localhost:3000/api/v1" : "http://10.0.2.2:3000/api/v1",
+  API_URL: "http://cxh1-b.tsetc.net:3000/api/v1",
 }
