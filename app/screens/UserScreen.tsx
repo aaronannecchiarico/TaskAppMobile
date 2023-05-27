@@ -6,10 +6,11 @@ import { AppStackScreenProps } from "app/navigators"
 import { Screen, Text, Button } from "app/components"
 import { spacing } from "app/theme"
 import { User, useStores } from "app/models"
+interface UserScreenProps extends NativeStackScreenProps<AppStackScreenProps<"User">> {
+  navigation: any
+}
 
-interface UserScreenProps extends NativeStackScreenProps<AppStackScreenProps<"User">> {}
-
-export const UserScreen: FC<UserScreenProps> = observer(function UserScreen() {
+export const UserScreen: FC<UserScreenProps> = observer(function UserScreen({navigation}) {
       // Are we refreshing the data?
       const [refreshing, setRefreshing] = React.useState(false)
 
@@ -47,6 +48,7 @@ export const UserScreen: FC<UserScreenProps> = observer(function UserScreen() {
               onPress={async () => {
                 try{
                   await logout()
+                  navigation.navigate('Login');
                   if(!isAuthenticated) {
                     console.tron.log("User is not authenticated")
                   }
