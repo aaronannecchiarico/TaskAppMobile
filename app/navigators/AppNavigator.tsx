@@ -51,35 +51,8 @@ const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
   const { authUserStore } = useStores()
-  const { authorize, getCredentials, user, error } = useAuth0()
 
-  if (user !== authUserStore.user) {
-    authUserStore.saveUser(user)
-  }
-
-  if(authUserStore.user && !authUserStore.isLoggedIn){
-    getCredentials().then(({ accessToken, idToken }) => {
-      if (accessToken && accessToken !== authUserStore.access_token) {
-        authUserStore.saveAccessToken(accessToken)
-      }
-  
-      if (idToken && idToken !== authUserStore.id_token) {
-        authUserStore.saveIdToken(idToken)
-      }
-    }).catch((error) => {
-      console.tron.log("Auth0 Error calling getCredentials()", error)
-    })
-  }
-
-  const handleLogin = async () => {
-    await authorize();
-    if(error){
-      console.tron.log("Auth0 Error calling authorize()", error)
-      throw error
-    }
-  }
-
-  const isAuthenticated = authUserStore.isLoggedIn
+  const isAuthenticated = authUserStore.isAuthenticated
 
   return (
     <Stack.Navigator
@@ -87,12 +60,12 @@ const AppStack = observer(function AppStack() {
       initialRouteName={isAuthenticated ? "User" : "Login"}
     >
       {isAuthenticated ? (
-        <Stack.Screen name="User" component={Screens.UserScreen} />
+        <>
+          <Stack.Screen name="User" component={Screens.UserScreen} />
+          <Stack.Screen name="Login">{(props) => <Screens.LoginScreen {...props} />}</Stack.Screen>
+        </>
       ) : (
-        <Stack.Screen name="Login">
-          {(props) => <Screens.LoginScreen {...props} handleLogin={handleLogin} />}
-        </Stack.Screen>
-
+        <Stack.Screen name="Login">{(props) => <Screens.LoginScreen {...props} />}</Stack.Screen>
       )}
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>

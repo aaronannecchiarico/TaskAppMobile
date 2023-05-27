@@ -3,13 +3,14 @@ import { observer } from "mobx-react-lite"
 import { FlatList, TextStyle, View, ViewStyle } from "react-native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { AppStackScreenProps } from "app/navigators"
-import { Screen, Text } from "app/components"
+import { Screen, Text, Button } from "app/components"
 import { spacing } from "app/theme"
 import { User, useStores } from "app/models"
+interface UserScreenProps extends NativeStackScreenProps<AppStackScreenProps<"User">> {
+  navigation: any
+}
 
-interface UserScreenProps extends NativeStackScreenProps<AppStackScreenProps<"User">> {}
-
-export const UserScreen: FC<UserScreenProps> = observer(function UserScreen() {
+export const UserScreen: FC<UserScreenProps> = observer(function UserScreen({navigation}) {
       // Are we refreshing the data?
       const [refreshing, setRefreshing] = React.useState(false)
 
@@ -38,6 +39,31 @@ export const UserScreen: FC<UserScreenProps> = observer(function UserScreen() {
         )
       }
 
+      const LogoutAuthUserButton = () => {
+        const { isAuthenticated, logout } = authUserStore
+        if(isAuthenticated) {
+          return (
+            <Button
+              text="Logout"
+              onPress={async () => {
+                try{
+                  await logout()
+                  navigation.navigate('Login');
+                  if(!isAuthenticated) {
+                    console.tron.log("User is not authenticated")
+                  }
+                }catch(error){
+                  console.tron.log("Error calling handleLogout()", error)
+                }
+              }}
+              style={$button}
+            />
+          )
+        }
+        return null
+      }
+
+
       const ObservedUser = observer(UserComponent)
 
   // Pull in navigation via hook
@@ -45,6 +71,7 @@ export const UserScreen: FC<UserScreenProps> = observer(function UserScreen() {
   return (
     <Screen style={$root} preset="fixed">
     <Text preset="heading" tx={"userScreen.users"} style={$header} />
+    <LogoutAuthUserButton />
     <FlatList
       data={users}
       renderItem={(item) => <ObservedUser item={item} />}
@@ -70,4 +97,9 @@ const $user: TextStyle = {
   fontWeight: "bold",
   fontSize: spacing.medium,
   marginVertical: spacing.medium,
+}
+
+const $button: ViewStyle = {
+  marginBottom: spacing.medium,
+  marginTop: spacing.medium,
 }
