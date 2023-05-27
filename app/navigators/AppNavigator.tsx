@@ -51,8 +51,8 @@ const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = observer(function AppStack() {
   const { authUserStore } = useStores()
-  
-  const isAuthenticated = authUserStore.isAuthenticated;
+
+  const isAuthenticated = authUserStore.isAuthenticated
 
   return (
     <Stack.Navigator
@@ -60,14 +60,12 @@ const AppStack = observer(function AppStack() {
       initialRouteName={isAuthenticated ? "User" : "Login"}
     >
       {isAuthenticated ? (
-        <><Stack.Screen name="User" component={Screens.UserScreen} /><Stack.Screen name="Login">
-          {(props) => <Screens.LoginScreen {...props} />}
-        </Stack.Screen></>
+        <>
+          <Stack.Screen name="User" component={Screens.UserScreen} />
+          <Stack.Screen name="Login">{(props) => <Screens.LoginScreen {...props} />}</Stack.Screen>
+        </>
       ) : (
-        <Stack.Screen name="Login">
-          {(props) => <Screens.LoginScreen {...props} />}
-        </Stack.Screen>
-
+        <Stack.Screen name="Login">{(props) => <Screens.LoginScreen {...props} />}</Stack.Screen>
       )}
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>

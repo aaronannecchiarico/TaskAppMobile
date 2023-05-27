@@ -55,7 +55,7 @@ export const AuthUserModel = types
         self.setAccessToken("")
         self.setIdToken("")
         self.setUser({})
-        self.setIsAuthenticated(true)
+        self.setIsAuthenticated(false)
       } catch (error) {
         console.tron.reportError(error)
       }
