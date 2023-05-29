@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   },
   top: {
     flexGrow: 1,
-    padding: "5px",
+    padding: 5,
     backgroundColor: "#c0d9f9",
   },
   details: {
@@ -56,13 +56,13 @@ const styles = StyleSheet.create({
   bidContainer: {
     flexGrow: 1,
     // border: "1px green dotted",
-    padding: "5px",
+    padding: 5,
   },
   floatingBid: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "90vw",
+    width: "90%",
     padding: 20,
     backgroundColor: "#2e314d",
     alignSelf: "center",
@@ -94,7 +94,7 @@ export const TaskDetailsScreen = observer(
           </View>
         </View>
         <View style={styles.top}>
-          <View style={{ height: "250px" }}></View>
+          <View style={{ height: 250 }}></View>
         </View>
         <View style={styles.details}>
           <Text style={styles.detailsTitle}>{title || "Test Title"}</Text>
